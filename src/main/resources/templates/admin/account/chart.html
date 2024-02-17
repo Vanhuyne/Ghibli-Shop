@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Account Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container">
+    <h1>Account Chart</h1>
+    <div class="row text-center">
+        <canvas class="col-6" id="roleChart" width="400" height="400"></canvas>
+        <canvas class="col-6" id="activatedChart" width="400" height="400"></canvas>
+    </div>
+</div>
+<script th:inline="javascript">
+    var adminCount = [[${adminCount}]];
+    var userCount = [[${userCount}]];
+
+    var ctx = document.getElementById('roleChart').getContext('2d');
+    var accountChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Admin', 'User'],
+            datasets: [{
+                label: 'Account Count',
+                data: [adminCount, userCount],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 99, 132, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+            responsive: false,
+            maintainAspectRatio: false
+        }
+    });
+</script>
+<script th:inline="javascript">
+    var activatedCount = [[${activatedCount}]];
+    var nonActivatedCount = [[${nonActivatedCount}]];
+
+    var ctx = document.getElementById('activatedChart').getContext('2d');
+    var accountChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Activated', 'Non-Activated'],
+            datasets: [{
+                label: 'Account Status',
+                data: [activatedCount, nonActivatedCount],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(255, 99, 132, 0.5)'
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: false,
+            maintainAspectRatio: false
+        }
+    });
+</script>
+
+</body>
+
+</html>

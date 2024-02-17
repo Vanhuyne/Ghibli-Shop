@@ -1,0 +1,110 @@
+<!-- cart.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+            crossorigin="anonymous"></script>
+    <!-- Include Bootstrap Icons library (CDN) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link th:href="@{/styles/main.css}" rel="stylesheet"/>
+
+    <title>Shopping Cart</title>
+
+
+</head>
+<body class="mw-100">
+<div th:replace="~{fragments/_navbar :: nav}"></div>
+<div class="bg-light mt-5">
+    <div class="container mt-2 border border-1">
+        <h2 class="container text-start  mt-5">Shopping Cart</h2>
+        <!-- Check if the shopping cart is empty -->
+        <div th:if="${emptyCart}" class="text-center">
+            <p class="text-muted">Your shopping cart is empty. Add some products!</p>
+            <p><a href="/products" class="btn btn-outline-secondary rounded-0"><i
+                    class="bi bi-arrow-left me-2"></i>Continue
+                Shopping</a>
+        </div>
+
+        <!-- Display the cart contents if not empty -->
+        <div th:unless="${emptyCart}">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Image</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody class="align-middle">
+                    <!-- Iterate over order details -->
+                    <tr th:each="orderDetail : ${order.orderDetails}">
+                        <td><img th:src="${orderDetail.product.image}" alt="Product Image"
+                                 class="img-thumbnail rounded-0 "
+                                 style="width: 250px;"/></td>
+                        <td th:text="${orderDetail.product.name}"></td>
+                        <td th:text="${orderDetail.price} + '$'"></td>
+                        <td>
+                            <div class="input-group">
+                                <form th:action="@{/cart/updateQuantity}" method="post">
+                                    <input type="hidden" name="orderDetailsId" th:value="${orderDetail.id}"/>
+                                    <input type="hidden" name="quantityChange" value="-1"/>
+                                    <button type="submit" class="btn btn-outline-secondary rounded-0 text-center"
+                                    >-
+                                    </button>
+                                </form>
+                                <span class="input-group-text" th:text="${orderDetail.quantity}"></span>
+                                <form th:action="@{/cart/updateQuantity}" method="post">
+                                    <input type="hidden" name="orderDetailsId" th:value="${orderDetail.id}"/>
+                                    <input type="hidden" name="quantityChange" value="1"/>
+                                    <button type="submit" class="btn btn-outline-secondary rounded-0 text-center"
+                                    >+
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                        <!--                        <td th:text="${orderDetail.price * orderDetail.quantity} + '$'"></td>-->
+                        <td th:text="${#numbers.formatDecimal(orderDetail.price * orderDetail.quantity, 1, 2, 'COMMA')} + '$'"></td>
+                        <td>
+                            <a type="button"
+                               th:href="@{/cart/remove/{orderDetailsId}(orderDetailsId=${orderDetail.id})}"
+                               class="btn btn-sm">
+                                <span class="bi bi-x" style="font-size:25px;"></span> <!-- Bootstrap X icon -->
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <hr>
+            <h4 class="text-end font-weight-bold">Total: <span th:text="${orderTotal} + '$'"></span></h4>
+
+            <div class="row mt-2">
+                <div class="col-md-6 text-end font-weight-bold">
+                    <p class="d-flex justify-content-start">
+                        <a href="/products" class="btn btn-outline-secondary rounded-0"><i
+                                class="bi bi-arrow-left me-2"></i>Continue
+                            Shopping</a>
+                    </p>
+                </div>
+                <div class="col-md-6 text-center ">
+                    <!-- Add a link to proceed to checkout -->
+                    <p class="d-flex justify-content-end">
+                        <a th:href="@{/cart/confirm-order(orderTotal=${orderTotal})}" class="btn btn-primary rounded-0">Confirm
+                            order</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="~{fragments/_footer :: footer}"></div>
+
+</body>
+</html>
