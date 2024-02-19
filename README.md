@@ -61,5 +61,8 @@ Make sure you have the following installed:
    ```bash
    mvn spring-boot:run
 
+## Configuration
+
+The application can be configured by modifying the `application.properties` file. Here you can set your database connection properties, mail server properties, and other settings.
 
   
