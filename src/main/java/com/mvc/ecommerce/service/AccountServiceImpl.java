@@ -101,7 +101,7 @@ public class AccountServiceImpl implements AccountService {
                 // Save the file to the designated directory
                 Path uploadPath = Paths.get("D:/ecommerce/ecommerce/ecommerce/src/main/resources/static/" + UPLOAD_DIR);
                 Files.createDirectories(uploadPath);
-
+                
                 try (var inputStream = profilePicture.getInputStream()) {
                     Path filePath = uploadPath.resolve(newFileName);
                     Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
