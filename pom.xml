@@ -94,18 +94,18 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                    <release>17</release>
+                    <verbose>true</verbose>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <image>
-                        <builder>paketobuildpacks/builder-jammy-base:latest</builder>
-                    </image>
-                </configuration>
-            </plugin>
+            <!--            <plugin>-->
+            <!--                <groupId>org.springframework.boot</groupId>-->
+            <!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+            <!--                <configuration>-->
+            <!--                    <image>-->
+            <!--                        <builder>paketobuildpacks/builder-jammy-base:latest</builder>-->
+            <!--                    </image>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
 
         </plugins>
     </build>
