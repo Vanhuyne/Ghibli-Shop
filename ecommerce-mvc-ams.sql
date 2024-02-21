@@ -52,7 +52,7 @@ SELECT username, 'ROLE_ADMIN' as authority FROM account WHERE username='huy2' AN
 -- Insert Account
 INSERT INTO Account (username, address, password, fullname, email, photo, activated, admin)
 VALUES ('huy2','TPHCM', '123456', 'John Doe', 'johndoe@example.com', 'default_photo.jpg', true, false);
-INSERT INTO Account VALUES ('huy2','TPHCM', '2', 'John Doe', 'johndoe@example.com', 'default_photo.jpg', true, false);
+INSERT INTO Account VALUES ('huyadmin','TPHCM', '159357', 'John Doe', 'johndoe@example.com', 'default_photo.jpg', true, false);
 INSERT INTO account (username, address, password, fullname, email, photo, activated, admin)
 VALUES
     ('john_doe', '123 Main St', 'password123', 'John Doe', 'john.doe@example.com', NULL, true, true),

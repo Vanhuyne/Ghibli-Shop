@@ -20,14 +20,9 @@ public class LoginController {
     private final CartService cartService;
     private final AccountService accountService;
     private final HttpSession httpSession;
-
     @GetMapping("/login")
-    public String showLoginForm(Model model) {
-      
-        if (httpSession.getAttribute("loggedInUser") != null) {
-            return "redirect:/products";
-        }
-        return "user/login";
+    public String showLoginForm() {
+        return (httpSession.getAttribute("loggedInUser") != null) ? "redirect:/products" : "user/login";
     }
 
 
