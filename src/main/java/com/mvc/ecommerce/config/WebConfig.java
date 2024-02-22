@@ -16,15 +16,17 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Autowired
-    private ProjectPathProvider projectPathProvider;
+    private final String resourcePath = System.getProperty("user.dir") + "/src/main/resources/static/";
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/uploads/**")
-                .addResourceLocations(projectPathProvider.getStaticResourcesPath() + "uploads/")
-                .setCacheControl(CacheControl.maxAge(365, TimeUnit.DAYS).cachePublic());
-        registry.addResourceHandler("/images/**")
-                .addResourceLocations("file:D:/ecommerce/ecommerce/ecommerce/src/main/resources/static/images/")
+        addResourceHandler(registry, "/uploads/**", "uploads/");
+        addResourceHandler(registry, "/images/**", "images/");
+    }
+
+    private void addResourceHandler(ResourceHandlerRegistry registry, String urlPattern, String resourceLocation) {
+        registry.addResourceHandler(urlPattern)
+                .addResourceLocations("file:" + resourcePath + resourceLocation)
                 .setCacheControl(CacheControl.maxAge(365, TimeUnit.DAYS).cachePublic());
     }
 

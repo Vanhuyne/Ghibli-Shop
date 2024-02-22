@@ -99,7 +99,9 @@ public class AccountServiceImpl implements AccountService {
                 String newFileName = System.currentTimeMillis() + "-" + fileName;
 
                 // Save the file to the designated directory
-                Path uploadPath = Paths.get("D:/ecommerce/ecommerce/ecommerce/src/main/resources/static/" + UPLOAD_DIR);
+                String resourcePath = System.getProperty("user.dir") + "/src/main/resources/static/" + UPLOAD_DIR;
+                
+                Path uploadPath = Paths.get(resourcePath);
                 Files.createDirectories(uploadPath);
 
                 try (var inputStream = profilePicture.getInputStream()) {
