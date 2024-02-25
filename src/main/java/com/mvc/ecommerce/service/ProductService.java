@@ -31,4 +31,6 @@ public interface ProductService {
     void addProduct(String name, String imageUrl, double price, boolean available, Long categoryId);
 
     Page<Product> getAllProductsByPageAndAvailable(Pageable pageRequest);
+
+
 }

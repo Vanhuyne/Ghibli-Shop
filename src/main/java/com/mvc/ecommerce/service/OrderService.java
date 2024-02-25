@@ -8,4 +8,6 @@ public interface OrderService {
     List<Order> getAllOrders();
 
     List<Order> ListOrderConfirmed(String status);
+
+    void deleteOrderById(Long id);
 }

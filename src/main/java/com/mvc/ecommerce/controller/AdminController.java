@@ -336,6 +336,14 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/delete-order")
+    public String deleteOrder(@RequestParam Long id) {
+        //delete order is binding
+        orderService.deleteOrderById(id);
+        return "redirect:/admin/dashboard/orders";
+
+    }
+
     @GetMapping("/export-user/excel")
     public void exportUserToExcel(HttpServletResponse response) throws IOException {
         response.setContentType("application/octet-stream");
@@ -390,4 +398,6 @@ public class AdminController {
         return "admin/account/chart";
 
     }
+
+
 }

@@ -15,11 +15,20 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> getAllOrders() {
-        return orderRepository.findAll();
+        return orderRepository.findAllByStatusNot("Deleted");
     }
 
     @Override
     public List<Order> ListOrderConfirmed(String status) {
         return orderRepository.findAllByStatus(status);
     }
+
+    @Override
+    public void deleteOrderById(Long id) {
+        //set status to deleted
+        Order order = orderRepository.findById(id).get();
+        order.setStatus("Deleted");
+        orderRepository.save(order);
+    }
+
 }

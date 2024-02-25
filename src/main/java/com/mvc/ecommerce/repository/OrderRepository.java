@@ -17,6 +17,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
     List<Order> findAll();
 
-    // order has status "Confirmed"
+    // order has status not equal to "pending" or "confirmed"
+    List<Order> findAllByStatusNot(String status);
+
     List<Order> findAllByStatus(String status);
 }

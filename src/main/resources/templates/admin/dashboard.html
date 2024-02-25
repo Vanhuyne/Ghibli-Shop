@@ -208,6 +208,7 @@
                             <th>Address</th>
                             <th>Status</th>
                             <th>Order Details</th>
+                            <th>Action</th>
                             <!-- Add more order fields as needed -->
                         </tr>
                         </thead>
@@ -287,6 +288,7 @@
                                                         <td th:text="${orderDetail.price}"></td>
                                                         <td th:text="${orderDetail.quantity}"></td>
                                                         <td th:text="${#numbers.formatDecimal(orderDetail.price * orderDetail.quantity, 1, 2, 'COMMA')} + '$'"></td>
+
                                                     </tr>
 
                                                     </tbody>
@@ -301,10 +303,13 @@
                                     </div>
                                 </div>
                             </td>
+                            <td><a th:href="@{/admin/delete-order(id=${order.id})}"><i
+                                        class="bi bi-trash text-danger"></i></a></td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
+
                 <div th:case="categories">
                     <h2>Categories List</h2>
                     <p class="d-flex justify-content-end">

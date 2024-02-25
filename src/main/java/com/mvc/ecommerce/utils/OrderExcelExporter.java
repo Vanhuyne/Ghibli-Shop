@@ -1,6 +1,5 @@
 package com.mvc.ecommerce.utils;
 
-import com.mvc.ecommerce.entity.Account;
 import com.mvc.ecommerce.entity.Order;
 import com.mvc.ecommerce.entity.OrderDetails;
 import jakarta.servlet.ServletOutputStream;
