@@ -11,7 +11,7 @@
     <groupId>com.mvc</groupId>
     <artifactId>ecommerce</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>ecommerce</name>
     <description>ecommorce using spring mvc</description>
     <properties>
