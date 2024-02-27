@@ -28,7 +28,7 @@ This is a simple ecommerce application built with Java and Spring Boot.
   - Cart functionality
   - Sorting products by price
 
-    ![Project Logo](homepage.png)
+    ![Project Logo](homepage1.png)
   
   ### Admin Features
   - CRUD operations for admin (Create, Read, Update, Delete) to manage products, category, users
