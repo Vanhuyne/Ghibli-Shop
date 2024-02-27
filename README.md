@@ -19,17 +19,21 @@ This is a simple ecommerce application built with Java and Spring Boot.
 - Maven
 - SQL
 - ChatGPT, Copilot
+  
+## Features
+  ### User Features
+  - User registration ,login and forgot password
+  - Product listing
+  - Product search and filter
+  - Cart functionality
+  - Sorting products by price
 
-### User Features
-- User registration ,login and forgot password
-- Product listing
-- Product search and filter
-- Cart functionality
-- Sorting products by price
+    ![Project Logo](homepage.png)
+  
+  ### Admin Features
+  - CRUD operations for admin (Create, Read, Update, Delete) to manage products, category, users
 
-### Admin Features
-- CRUD operations for admin (Create, Read, Update, Delete) to manage products, category, users
-
+  ![Project Logo](manager.png)
 ## Setup
 
 ### Prerequisites
