@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import static com.mvc.ecommerce.constant.Contstant.UPLOAD_DIR;
+import static com.mvc.ecommerce.constant.Constant.UPLOAD_DIR;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -100,7 +100,7 @@ public class AccountServiceImpl implements AccountService {
 
                 // Save the file to the designated directory
                 String resourcePath = System.getProperty("user.dir") + "/src/main/resources/static/" + UPLOAD_DIR;
-                
+
                 Path uploadPath = Paths.get(resourcePath);
                 Files.createDirectories(uploadPath);
 
@@ -179,4 +179,7 @@ public class AccountServiceImpl implements AccountService {
     public List<Account> getAllUsers() {
         return accountRepository.findAll();
     }
+
+
 }
+

@@ -11,7 +11,6 @@
     <groupId>com.mvc</groupId>
     <artifactId>ecommerce</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
     <name>ecommerce</name>
     <description>ecommorce using spring mvc</description>
     <properties>
@@ -82,6 +81,8 @@
         <!--        <dependency>-->
         <!--            <groupId>org.thymeleaf.extras</groupId>-->
         <!--            <artifactId>thymeleaf-extras-springsecurity6</artifactId>-->
+        <!--            &lt;!&ndash; Temporary explicit version to fix Thymeleaf bug &ndash;&gt;-->
+        <!--            <version>3.1.1.RELEASE</version>-->
         <!--        </dependency>-->
     </dependencies>
 
@@ -104,16 +105,6 @@
                 <artifactId>heroku-maven-plugin</artifactId>
                 <version>3.0.7</version>
             </plugin>
-            <!--            <plugin>-->
-            <!--                <groupId>org.springframework.boot</groupId>-->
-            <!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
-            <!--                <configuration>-->
-            <!--                    <image>-->
-            <!--                        <builder>paketobuildpacks/builder-jammy-base:latest</builder>-->
-            <!--                    </image>-->
-            <!--                </configuration>-->
-            <!--            </plugin>-->
-
         </plugins>
     </build>
 

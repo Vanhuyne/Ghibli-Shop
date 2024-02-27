@@ -47,20 +47,16 @@ public class AdminController {
 
         Account loggedInUser = (Account) httpSession.getAttribute("loggedInUser");
 
-
-        if (loggedInUser != null && loggedInUser.getAdmin()) {
-
-            model.addAttribute("loggedInUser", loggedInUser);
-            model.addAttribute("activeSection", "users"); // Default active section
-            // Fetch users data for the active section and page
-            fetchUserData("users", page, size, model);
-            model.addAttribute("sizeCart", cartService.getSizeCart(loggedInUser.getUsername()));
-
-
-            return "admin/dashboard";
-        } else {
+        if (loggedInUser == null || !loggedInUser.getAdmin()) {
             return "redirect:/login";
         }
+
+        model.addAttribute("loggedInUser", loggedInUser);
+        model.addAttribute("activeSection", "users");
+        fetchUserData("users", page, size, model);
+        model.addAttribute("sizeCart", cartService.getSizeCart(loggedInUser.getUsername()));
+
+        return "admin/dashboard";
     }
 
     @GetMapping("/dashboard/{activeSection}")
@@ -70,6 +66,7 @@ public class AdminController {
 
         // Fetch data for the respective sections using switch case
         fetchUserData(activeSection, page, size, model);
+
         addLoggedInUserInfoToModel(httpSession, model, cartService);
         return "admin/dashboard";
     }
@@ -96,9 +93,9 @@ public class AdminController {
 
             case "orders":
                 List<Order> orders = orderService.getAllOrders();
+
                 // Sort the orders based on status
                 Collections.sort(orders, Comparator.comparing(Order::getStatus));
-
                 model.addAttribute("orders", orders);
                 break;
 
@@ -106,11 +103,7 @@ public class AdminController {
                 List<Category> categories = categoryService.getAllCategories();
                 model.addAttribute("categories", categories);
                 break;
-
-            // Add more cases for other sections as needed
-
             default:
-                // Handle default case
                 break;
         }
     }
@@ -118,9 +111,7 @@ public class AdminController {
 
     @GetMapping("/add-new-user")
     public String list(Model model) {
-
-        Account user = new Account();
-        model.addAttribute("user", user);
+        model.addAttribute("user", new Account());
         addLoggedInUserInfoToModel(httpSession, model, cartService);
         return "admin/account/add_new_user";
     }
@@ -140,12 +131,10 @@ public class AdminController {
             // Convert the radio button value to boolean
             account.setAdmin(Boolean.parseBoolean(admin));
 
-            // Call the service to update the user
             Account account1 = accountService.registerUser(account);
 
             // check if profilePicture
-            if (profilePicture != null && !profilePicture.isEmpty()) {
-
+            if (!profilePicture.isEmpty()) {
                 accountService.updateProfilePicture(account1, profilePicture);
             }
         } catch (Exception e) {
@@ -166,11 +155,7 @@ public class AdminController {
     @GetMapping("/edit-user/{username}")
     public String showUpdateForm(@PathVariable("username") String username, Model model) {
         Account user = accountService.getUserByUsername(username);
-
-        if (user == null) {
-            // Handle user not found error
-            return "redirect:/admin/dashboard/users";
-        }
+        if (user == null) return "redirect:/admin/dashboard/users";
 
         model.addAttribute("user", user);
         addLoggedInUserInfoToModel(httpSession, model, cartService);
@@ -183,7 +168,6 @@ public class AdminController {
                              @RequestParam("profilePicture") MultipartFile profilePicture,
                              @RequestParam(value = "admin", required = false) String admin) {
         if (result.hasErrors()) {
-
             addLoggedInUserInfoToModel(httpSession, model, cartService);
             return "admin/account/update_user"; // Redirect to the same page to keep the modal open
         }
@@ -197,7 +181,7 @@ public class AdminController {
             accountService.updateProfileInfo(account);
 
             // check if profilePicture
-            if (profilePicture != null && !profilePicture.isEmpty()) {
+            if (!profilePicture.isEmpty()) {
                 accountService.updateProfilePicture(account, profilePicture);
             }
         } catch (Exception e) {
@@ -336,6 +320,7 @@ public class AdminController {
         }
     }
 
+
     @GetMapping("/delete-order")
     public String deleteOrder(@RequestParam Long id) {
         //delete order is binding
@@ -343,6 +328,7 @@ public class AdminController {
         return "redirect:/admin/dashboard/orders";
 
     }
+
 
     @GetMapping("/export-user/excel")
     public void exportUserToExcel(HttpServletResponse response) throws IOException {

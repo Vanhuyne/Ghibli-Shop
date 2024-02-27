@@ -28,8 +28,8 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
 
-    @Value("${upload.path}")
-    private String uploadPath;
+    private String uploadPath = System.getProperty("user.dir") + "/src/main/resources/static/" + "images";
+
 
     @Override
     public Page<Product> getAllProductsByPageAndAvailable(Pageable pageRequest) {
@@ -132,5 +132,5 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
     }
 
-   
+
 }
