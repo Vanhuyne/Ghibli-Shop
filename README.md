@@ -13,11 +13,12 @@ This is a simple ecommerce application built with Java and Spring Boot.
 - [Contributing](#contributing)
 
 ## Technologies Used
-- Java
+- Java 
 - JavaScript
 - Spring Boot
 - Maven
 - SQL
+- ChatGPT, Copilot
 
 ### User Features
 - User registration ,login and forgot password
