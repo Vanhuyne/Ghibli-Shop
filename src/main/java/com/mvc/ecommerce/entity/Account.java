@@ -7,20 +7,24 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
+@Data
 @Entity
 @Table(name = "Account")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Account {
+public class Account implements UserDetails {
     @Id
     @Column(name = "username")
     @NotEmpty(message = "Username cannot be empty")
@@ -52,5 +56,35 @@ public class Account {
 
     @Column(name = "admin")
     private Boolean admin;
-    
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        if (getAdmin()) {
+            authorities.add(new SimpleGrantedAuthority("ADMIN"));
+        } else {
+            authorities.add(new SimpleGrantedAuthority("USER"));
+        }
+        return authorities;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

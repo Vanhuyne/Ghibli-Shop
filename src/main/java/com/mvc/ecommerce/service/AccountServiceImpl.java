@@ -7,6 +7,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,10 +28,12 @@ import java.util.Optional;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Account findByUsernameAndPassword(String username, String password) {
-        Account account = accountRepository.findByUsernameAndPasswordAndActivatedTrue(username, password);
+        String passwordEncoded = passwordEncoder.encode(password);
+        Account account = accountRepository.findByUsernameAndPasswordAndActivatedTrue(username, passwordEncoded);
         return account;
     }
 
@@ -58,6 +61,9 @@ public class AccountServiceImpl implements AccountService {
         if (existingEmail.isPresent()) {
             throw new IllegalArgumentException("Email already exists");
         }
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setAdmin(false);
         user.setActivated(true);
         // Save the user to the database
         return accountRepository.save(user);

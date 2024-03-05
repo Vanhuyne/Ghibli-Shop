@@ -5,6 +5,11 @@ import com.mvc.ecommerce.service.AccountService;
 import com.mvc.ecommerce.service.CartService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,30 +25,53 @@ public class LoginController {
     private final CartService cartService;
     private final AccountService accountService;
     private final HttpSession httpSession;
+
+    private final PasswordEncoder passwordEncoder;
+
     @GetMapping("/login")
     public String showLoginForm() {
         return (httpSession.getAttribute("loggedInUser") != null) ? "redirect:/products" : "user/login";
     }
 
 
+    //    @PostMapping("/login-process")
+//    public String loginProcess(@RequestParam String username, @RequestParam String password, Model model, RedirectAttributes redirectAttributes) {
+//        // Authenticate the user in your service
+//        Account account = accountService.findByUsernameAndPassword(username, password);
+//
+//        if (account != null) {
+//            if (!account.getAdmin()) {
+//                // Authentication successful
+//                httpSession.setAttribute("loggedInUser", account);
+//                model.addAttribute("loggedInUser", account);
+//                httpSession.setMaxInactiveInterval(36000);
+//
+//                return "redirect:/products";
+//            } else {
+//                // Authentication successful
+//                httpSession.setAttribute("loggedInUser", account);
+//                model.addAttribute("loggedInUser", account);
+//                return "redirect:/admin/dashboard";
+//            }
+//        } else {
+//            // Authentication failed
+//            redirectAttributes.addFlashAttribute("error", "Invalid username or password");
+//            return "redirect:/login";
+//        }
+//    }
     @PostMapping("/login-process")
     public String loginProcess(@RequestParam String username, @RequestParam String password, Model model, RedirectAttributes redirectAttributes) {
-        // Authenticate the user in your service
-        Account account = accountService.findByUsernameAndPassword(username, password);
+        UserDetails userDetails = accountService.getUserByUsername(username);
 
-        if (account != null) {
-            if (!account.getAdmin()) {
-                // Authentication successful
-                httpSession.setAttribute("loggedInUser", account);
-                model.addAttribute("loggedInUser", account);
-                httpSession.setMaxInactiveInterval(36000);
+        if (passwordEncoder.matches(password, userDetails.getPassword())) {
+            // Authentication successful
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(token);
 
-                return "redirect:/products";
-            } else {
-                // Authentication successful
-                httpSession.setAttribute("loggedInUser", account);
-                model.addAttribute("loggedInUser", account);
+            if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
                 return "redirect:/admin/dashboard";
+            } else {
+                return "redirect:/products";
             }
         } else {
             // Authentication failed
