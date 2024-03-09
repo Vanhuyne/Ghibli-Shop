@@ -21,7 +21,7 @@
             </div>
         </div>
         <!-- Display pagination controls -->
-        <nav aria-label="Page navigation example" th:if="${totalPages > 1 && sort == null}">
+        <nav aria-label="Page navigation example" th:if="${totalPages > 1 && sort == null }">
             <ul class="pagination justify-content-center">
                 <li class="page-item rounded-circle " th:class="${currentPage == 0} ? 'disabled'">
                     <a class="page-link rounded-circle me-1"
@@ -42,7 +42,6 @@
                        aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
                 </li>
             </ul>
-
         </nav>
         <nav aria-label="Page navigation example" th:if="${totalPages > 1 && sort != null}">
             <ul class="pagination justify-content-center">

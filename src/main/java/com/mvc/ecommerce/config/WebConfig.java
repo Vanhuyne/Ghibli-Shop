@@ -28,10 +28,5 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResourceLocations("file:" + resourcePath + resourceLocation)
                 .setCacheControl(CacheControl.maxAge(365, TimeUnit.DAYS).cachePublic());
     }
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new LocaleChangeInterceptor());
-//        registry.addInterceptor(new ThemeChangeInterceptor()).addPathPatterns("/**").excludePathPatterns("/admin/**");
-    }
+    
 }

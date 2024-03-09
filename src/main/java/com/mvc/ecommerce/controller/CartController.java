@@ -20,67 +20,48 @@ public class CartController {
     private final CartService cartService;
 
     @GetMapping("/add/{productId}")
-    public String addToCart(
-            @PathVariable Long productId,
-            @RequestParam String username,
-            Model model) {
-
-        // Use the 'username' parameter in your logic
-        if (username != null) {
-            try {
-                cartService.addToCart(productId, username, 1);
-                model.addAttribute("sizeCart", cartService.getSizeCart(username));
-            } catch (NotFoundException e) {
-                model.addAttribute("errorMessage", e.getMessage());
-                return "redirect:/login";  // assuming you have a user-specific error page
-            }
-        } else {
-            // Redirect to the login page if the username is null
+    public String addToCart(@PathVariable Long productId, @RequestParam String username, Model model) {
+        if (username == null) {
+            return "redirect:/login";
+        }
+        try {
+            cartService.addToCart(productId, username, 1);
+            model.addAttribute("sizeCart", cartService.getSizeCart(username));
+        } catch (NotFoundException e) {
+            model.addAttribute("errorMessage", e.getMessage());
             return "redirect:/login";
         }
         return "redirect:/products";
-        //return "redirect:/cart/" + username;
     }
 
     @GetMapping("/{username}")
     public String viewCart(@PathVariable(required = false) String username, Model model) {
-        if (username != null && !username.isEmpty()) {
-            Account loggedInUser = (Account) httpSession.getAttribute("loggedInUser");
-            Order order = cartService.viewCart(username);
-
-            if (order != null && !order.getOrderDetails().isEmpty()) {
-                // Check if the order status is "Pending"
-                if ("Pending".equals(order.getStatus())) {
-
-                    // Calculate total order price only if there are order details
-                    double orderTotal = order.getOrderDetails().stream()
-                            .mapToDouble(orderDetail -> orderDetail.getPrice() * orderDetail.getQuantity())
-                            .sum();
-                    double orderTotalRound = Math.round(orderTotal * 100.0) / 100.0;
-
-                    model.addAttribute("loggedInUser", loggedInUser);
-                    model.addAttribute("order", order);
-                    model.addAttribute("orderTotal", orderTotalRound);
-                    model.addAttribute("sizeCart", cartService.getSizeCart(username));
-                    return "user/cart";
-                } else {
-                    // Handle the case where the order status is not "Pending"
-                    model.addAttribute("loggedInUser", loggedInUser);
-                    model.addAttribute("emptyCart", true);
-                    model.addAttribute("orderNotPending", true);
-                    model.addAttribute("sizeCart", cartService.getSizeCart(username));
-                    return "user/cart";
-                }
-            } else {
-                // Handle the case where the shopping cart is empty
-                model.addAttribute("loggedInUser", loggedInUser);
-                model.addAttribute("emptyCart", true);
-                return "user/cart";
-            }
-        } else {
-
+        if (username == null || username.isEmpty()) {
             return "redirect:/login";
         }
+
+        Account loggedInUser = (Account) httpSession.getAttribute("loggedInUser");
+        Order order = cartService.viewCart(username);
+        model.addAttribute("loggedInUser", loggedInUser);
+        model.addAttribute("sizeCart", cartService.getSizeCart(username));
+
+        if (order == null || order.getOrderDetails().isEmpty()) {
+            model.addAttribute("emptyCart", true);
+            return "user/cart";
+        }
+
+        if (!"Pending".equals(order.getStatus())) {
+            model.addAttribute("orderNotPending", true);
+            return "user/cart";
+        }
+
+        double orderTotal = order.getOrderDetails().stream()
+                .mapToDouble(orderDetail -> orderDetail.getPrice() * orderDetail.getQuantity())
+                .sum();
+        model.addAttribute("order", order);
+        model.addAttribute("orderTotal", Math.round(orderTotal * 100.0) / 100.0);
+
+        return "user/cart";
     }
 
     @GetMapping("/remove/{orderDetailsId}")

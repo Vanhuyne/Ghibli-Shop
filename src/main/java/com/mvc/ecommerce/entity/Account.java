@@ -13,9 +13,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Entity
@@ -59,13 +57,30 @@ public class Account implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        if (getAdmin()) {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        if (admin != null && admin) {
             authorities.add(new SimpleGrantedAuthority("ADMIN"));
         } else {
             authorities.add(new SimpleGrantedAuthority("USER"));
         }
+        System.out.println(authorities);
         return authorities;
+
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "username='" + username + '\'' +
+                ", address='" + address + '\'' +
+                ", password='" + password + '\'' +
+                ", fullname='" + fullname + '\'' +
+                ", email='" + email + '\'' +
+                ", photo='" + photo + '\'' +
+                ", activated=" + activated +
+                ", admin=" + admin +
+                '}';
     }
 
     @Override

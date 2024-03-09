@@ -41,6 +41,7 @@ public class AdminController {
     private final CartService cartService;
     private final CategoryService categoryService;
 
+
     @GetMapping("/dashboard")
     public String adminDashboard(Model model, @RequestParam(defaultValue = "0") int page,
                                  @RequestParam(defaultValue = "5") int size) {

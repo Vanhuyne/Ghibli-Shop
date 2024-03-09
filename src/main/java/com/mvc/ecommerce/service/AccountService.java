@@ -23,6 +23,8 @@ public interface AccountService {
 
     void updateProfileInfo(Account user);
 
+    Account findByUsername(String username);
+
     Optional<Account> getAccountByEmail(String email);
 
     void deleteUser(String username);

@@ -67,8 +67,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> getProductsByCategoryId(Long categoryId) {
-        return productRepository.findAllByCategoryIdAndAvailableIsTrue(categoryId);
+    public Page<Product> getProductsByCategoryId(Long categoryId, Pageable pageable) {
+        return productRepository.findAllByCategoryIdAndAvailableIsTrue(categoryId, pageable);
     }
 
     @Override

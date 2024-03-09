@@ -1,9 +1,11 @@
 package com.mvc.ecommerce.controller;
 
 import com.mvc.ecommerce.entity.*;
+import com.mvc.ecommerce.service.AccountService;
 import com.mvc.ecommerce.service.CartService;
 import com.mvc.ecommerce.service.CategoryService;
 import com.mvc.ecommerce.service.ProductService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -24,51 +28,60 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-
-@RequestMapping("/")
+@RequestMapping()
 public class ProductController {
     private final ProductService productService;
-
+    private final AccountService accountService;
     private final HttpSession httpSession;
-
     private final CategoryService categoryService;
     private final CartService cartService;
 
     @GetMapping("/products")
     public String getAllProducts(Model model, @RequestParam(defaultValue = "0") int page,
                                  @RequestParam(defaultValue = "4") int size) {
-        // Retrieve a list of products from the ProductService
-        Account loggedInUser = (Account) httpSession.getAttribute("loggedInUser");
+        Account loggedInUser = getLoggedInUser();
         addCartSizeToModel(model, loggedInUser);
 
         Page<Product> products = productService.getAllProductsByPageAndAvailable(PageRequest.of(page, size));
         List<Category> categories = categoryService.getAllCategories();
 
-        // Add the logged-in user, page of products, and categories to the Thymeleaf model
-        model.addAttribute("loggedInUser", loggedInUser);
-        model.addAttribute("products", products.getContent());  // Extract the content from the Page
-        model.addAttribute("categories", categories);
-
-        // Add pagination-related attributes to the model
-
-        model.addAttribute("currentPage", products.getNumber());
-        model.addAttribute("totalPages", products.getTotalPages());
-        model.addAttribute("totalItems", products.getTotalElements());
-
+        addAttributesToModel(model, loggedInUser, products, categories);
 
         return "user/products";
     }
 
+    private Account getLoggedInUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal())) {
+            Account loggedInUser = accountService.findByUsername(authentication.getName());
+            httpSession.setAttribute("loggedInUser", loggedInUser);
+            httpSession.setMaxInactiveInterval(36000);
+            return loggedInUser;
+        }
+        return null;
+    }
+
+    private void addAttributesToModel(Model model, Account loggedInUser, Page<Product> products, List<Category> categories) {
+        model.addAttribute("loggedInUser", loggedInUser);
+        model.addAttribute("products", products.getContent());
+        model.addAttribute("categories", categories);
+        model.addAttribute("currentPage", products.getNumber());
+        model.addAttribute("totalPages", products.getTotalPages());
+        model.addAttribute("totalItems", products.getTotalElements());
+    }
+
     @GetMapping("/products/filter")
-    public String getProductsByCategoryId(@RequestParam(name = "categoryId") Long categoryId, Model model) {
-        List<Product> products = productService.getProductsByCategoryId(categoryId);
+    public String getProductsByCategoryId(@RequestParam(name = "categoryId") Long categoryId, Model model, @RequestParam(defaultValue = "0") int page,
+                                          @RequestParam(defaultValue = "4") int size) {
+        Account loggedInUser = getLoggedInUser();
+        Page<Product> products = productService.getProductsByCategoryId(categoryId, PageRequest.of(page, size));
         List<Category> categories = categoryService.getAllCategories();
 
-        Account loggedInUser = (Account) httpSession.getAttribute("loggedInUser");
-        model.addAttribute("loggedInUser", loggedInUser);
-        model.addAttribute("categories", categories);
-        model.addAttribute("products", products);
-        return "user/products"; // Assuming "products" is the Thymeleaf template for displaying products
+        model.addAttribute("sizeCart", loggedInUser != null ? cartService.getSizeCart(loggedInUser.getUsername()) : null);
+        addAttributesToModel(model, loggedInUser, products, categories);
+        model.addAttribute("filter", true);
+
+        return "user/products";
     }
 
     @GetMapping("/products/search")

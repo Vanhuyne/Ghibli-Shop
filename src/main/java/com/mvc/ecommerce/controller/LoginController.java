@@ -5,10 +5,6 @@ import com.mvc.ecommerce.service.AccountService;
 import com.mvc.ecommerce.service.CartService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,26 +55,32 @@ public class LoginController {
 //            return "redirect:/login";
 //        }
 //    }
-    @PostMapping("/login-process")
-    public String loginProcess(@RequestParam String username, @RequestParam String password, Model model, RedirectAttributes redirectAttributes) {
-        UserDetails userDetails = accountService.getUserByUsername(username);
-
-        if (passwordEncoder.matches(password, userDetails.getPassword())) {
-            // Authentication successful
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(token);
-
-            if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority("ADMIN"))) {
-                return "redirect:/admin/dashboard";
-            } else {
-                return "redirect:/products";
-            }
-        } else {
-            // Authentication failed
-            redirectAttributes.addFlashAttribute("error", "Invalid username or password");
-            return "redirect:/login";
-        }
-    }
+//    @PostMapping("/login-process")
+//    public String loginProcess(@RequestParam String username, @RequestParam String password, Model model, RedirectAttributes redirectAttributes) {
+//        UserDetails userDetails = accountService.getUserByUsername(username);
+//
+//        if (userDetails == null || !passwordEncoder.matches(password, userDetails.getPassword())) {
+//            // Authentication failed
+//            redirectAttributes.addFlashAttribute("error", "Invalid username or password");
+//            return "redirect:/login";
+//        }
+//
+//        // Authentication successful
+//        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+//        SecurityContextHolder.getContext().setAuthentication(token);
+//
+//        //System.out.println("User details: " + userDetails.getUsername() + " " + userDetails.getPassword() + " " + userDetails.getAuthorities());
+//
+//        httpSession.setAttribute("loggedInUser", userDetails);
+//        model.addAttribute("loggedInUser", userDetails);
+//        httpSession.setMaxInactiveInterval(36000);
+//        for (GrantedAuthority authority : userDetails.getAuthorities()) {
+//            if (authority.getAuthority().equals("ROLE_ADMIN")) {
+//                return "redirect:/admin/dashboard";
+//            }
+//        }
+//        return "redirect:/products";
+//    }
 
     @GetMapping("/logout")
     public String logout() {
@@ -154,7 +156,6 @@ public class LoginController {
 
     @GetMapping("/access-denied")
     public String showAccessDenied() {
-
         return "user/error";
     }
 
