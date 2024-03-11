@@ -126,11 +126,15 @@ public class CartServiceImpl implements CartService {
         if (optionalOrderDetails.isPresent()) {
             OrderDetails orderDetail = optionalOrderDetails.get();
             int newQuantity = orderDetail.getQuantity() + quantityChange;
-
+            
             if (newQuantity > 0) {
                 orderDetail.setQuantity(newQuantity);
                 orderDetailsRepository.save(orderDetail);
+            } else {
+                removeFromCart(orderDetailsId);
             }
+        } else {
+            throw new NotFoundException("OrderDetails not found with id: " + orderDetailsId);
         }
     }
 
