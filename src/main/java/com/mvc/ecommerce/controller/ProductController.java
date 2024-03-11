@@ -79,6 +79,7 @@ public class ProductController {
 
         model.addAttribute("sizeCart", loggedInUser != null ? cartService.getSizeCart(loggedInUser.getUsername()) : null);
         addAttributesToModel(model, loggedInUser, products, categories);
+        model.addAttribute("categoryId", categoryId);
         model.addAttribute("filter", true);
 
         return "user/products";
