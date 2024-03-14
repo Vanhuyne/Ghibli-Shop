@@ -28,67 +28,7 @@ public class LoginController {
     public String showLoginForm() {
         return (httpSession.getAttribute("loggedInUser") != null) ? "redirect:/products" : "user/login";
     }
-
-
-    //    @PostMapping("/login-process")
-//    public String loginProcess(@RequestParam String username, @RequestParam String password, Model model, RedirectAttributes redirectAttributes) {
-//        // Authenticate the user in your service
-//        Account account = accountService.findByUsernameAndPassword(username, password);
-//
-//        if (account != null) {
-//            if (!account.getAdmin()) {
-//                // Authentication successful
-//                httpSession.setAttribute("loggedInUser", account);
-//                model.addAttribute("loggedInUser", account);
-//                httpSession.setMaxInactiveInterval(36000);
-//
-//                return "redirect:/products";
-//            } else {
-//                // Authentication successful
-//                httpSession.setAttribute("loggedInUser", account);
-//                model.addAttribute("loggedInUser", account);
-//                return "redirect:/admin/dashboard";
-//            }
-//        } else {
-//            // Authentication failed
-//            redirectAttributes.addFlashAttribute("error", "Invalid username or password");
-//            return "redirect:/login";
-//        }
-//    }
-//    @PostMapping("/login-process")
-//    public String loginProcess(@RequestParam String username, @RequestParam String password, Model model, RedirectAttributes redirectAttributes) {
-//        UserDetails userDetails = accountService.getUserByUsername(username);
-//
-//        if (userDetails == null || !passwordEncoder.matches(password, userDetails.getPassword())) {
-//            // Authentication failed
-//            redirectAttributes.addFlashAttribute("error", "Invalid username or password");
-//            return "redirect:/login";
-//        }
-//
-//        // Authentication successful
-//        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-//        SecurityContextHolder.getContext().setAuthentication(token);
-//
-//        //System.out.println("User details: " + userDetails.getUsername() + " " + userDetails.getPassword() + " " + userDetails.getAuthorities());
-//
-//        httpSession.setAttribute("loggedInUser", userDetails);
-//        model.addAttribute("loggedInUser", userDetails);
-//        httpSession.setMaxInactiveInterval(36000);
-//        for (GrantedAuthority authority : userDetails.getAuthorities()) {
-//            if (authority.getAuthority().equals("ROLE_ADMIN")) {
-//                return "redirect:/admin/dashboard";
-//            }
-//        }
-//        return "redirect:/products";
-//    }
-
-    @GetMapping("/logout")
-    public String logout() {
-        // Invalidate the session and clear all session attributes
-        httpSession.invalidate();
-        return "redirect:/login";
-    }
-
+    
     @GetMapping("/view-profile/{username}")
     public String viewProfile(@PathVariable(required = false) String username, Model model) {
         Account loggedInUser = (Account) httpSession.getAttribute("loggedInUser");

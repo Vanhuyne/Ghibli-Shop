@@ -14,8 +14,8 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests(authorize -> authorize
-                        .requestMatchers("/styles/**", "/script/**").permitAll()
-                        .requestMatchers("/products/**", "/register", "/forgot-password").permitAll()
+                        .requestMatchers("/styles/**", "/script/**", "/images/**").permitAll()
+                        .requestMatchers("/products/**", "/register", "/forgot-password", "/products-details/**").permitAll()
                         .requestMatchers("/admin/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 ).formLogin(formLogin ->
@@ -25,9 +25,10 @@ public class WebSecurityConfig {
                                 defaultSuccessUrl("/products").
                                 permitAll()
                 ).logout(logout ->
-                        logout.
-                                logoutUrl("/logout").
-                                permitAll()
+                        logout
+                                .logoutSuccessUrl("/products")
+                                .permitAll()
+
                 )
         ;
         return http.build();
