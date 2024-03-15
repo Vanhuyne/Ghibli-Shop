@@ -26,7 +26,7 @@
                     <span th:text="${product.price} + '$'"></span>
                 </div>
                 <p class="lead">
-                    ipsam minima ea iste laborum vero?</p>
+                    <!--                    ipsam minima ea iste laborum vero?</p>-->
                 <div class="d-flex ">
                     <input class="form-control text-center me-3 rounded-0 border-secondary" id="inputQuantity"
                            name="quantity"
@@ -35,21 +35,28 @@
                            style="max-width: 3rem"
                     >
                     <a id="addToCartButton"
-                       th:href="@{'/products-details/addFromProductDetails/' + ${product.id} + '?username=' + ${loggedInUser?.username} + '&quantity='+'1' }"
+                       href="#"
                        class="btn btn-outline-secondary rounded-0 w-100 border-secondary"><i
                             class="bi-cart-fill me-1"></i>Add to Cart</a>
                 </div>
+
             </div>
         </div>
     </div>
 </section>
 <div th:replace="fragments/_footer :: footer"></div>
-<th:block th:if="${validationErrors}">
-    <script th:inline="javascript">
-        $(document).ready(function () {
-            $('#addUserModal').modal('show'); // Show the modal if there are errors
-        });
-    </script>
-</th:block>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    document.getElementById("addToCartButton").addEventListener("click", function(event) {
+        event.preventDefault(); // Prevent default action of the anchor tag
+        var quantity = document.getElementById("inputQuantity").value;
+        var productId = /*[[${product.id}]]*/ '';   // Get the product id from thymeleaf
+        var username = /*[[${loggedInUser?.username}]]*/ '';
+        var url = '/products-details/addFromProductDetails/' + productId + '?username=' + username + '&quantity=' + quantity;
+        window.location.href = url;
+    });
+    /*]]>*/
+</script>
+
 </body>
 </html>

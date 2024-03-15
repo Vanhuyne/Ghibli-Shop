@@ -38,7 +38,7 @@ public class ProductController {
 
     @GetMapping("/products")
     public String getAllProducts(Model model, @RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "4") int size) {
+                                 @RequestParam(defaultValue = "8") int size) {
         Account loggedInUser = getLoggedInUser();
         addCartSizeToModel(model, loggedInUser);
 
@@ -72,7 +72,7 @@ public class ProductController {
 
     @GetMapping("/products/filter")
     public String getProductsByCategoryId(@RequestParam(name = "categoryId") Long categoryId, Model model, @RequestParam(defaultValue = "0") int page,
-                                          @RequestParam(defaultValue = "4") int size) {
+                                          @RequestParam(defaultValue = "8") int size) {
         Account loggedInUser = getLoggedInUser();
         Page<Product> products = productService.getProductsByCategoryId(categoryId, PageRequest.of(page, size));
         List<Category> categories = categoryService.getAllCategories();
@@ -88,7 +88,7 @@ public class ProductController {
     @GetMapping("/products/search")
     public String searchProducts(@RequestParam("keyword") String keyword,
                                  @RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "4") int size,
+                                 @RequestParam(defaultValue = "8") int size,
                                  Model model) {
         // Retrieve a list of products from the ProductService
         Account loggedInUser = (Account) httpSession.getAttribute("loggedInUser");
@@ -111,7 +111,7 @@ public class ProductController {
     @GetMapping("/products/sortByPrice")
     public String getProductsSortedByPrice(
             Model model, @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "4") int size, @RequestParam(defaultValue = "asc") String sort) {
+            @RequestParam(defaultValue = "8") int size, @RequestParam(defaultValue = "asc") String sort) {
         // Retrieve a list of products from the ProductService
         Account loggedInUser = (Account) httpSession.getAttribute("loggedInUser");
         addCartSizeToModel(model, loggedInUser);

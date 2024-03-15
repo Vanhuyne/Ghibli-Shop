@@ -21,9 +21,6 @@ public class CartController {
 
     @GetMapping("/add/{productId}")
     public String addToCart(@PathVariable Long productId, @RequestParam String username, Model model) {
-        if (username == null) {
-            return "redirect:/login";
-        }
         try {
             cartService.addToCart(productId, username, 1);
             model.addAttribute("sizeCart", cartService.getSizeCart(username));
@@ -36,22 +33,14 @@ public class CartController {
 
     @GetMapping("/{username}")
     public String viewCart(@PathVariable(required = false) String username, Model model) {
-        if (username == null || username.isEmpty()) {
-            return "redirect:/login";
-        }
-
         Account loggedInUser = (Account) httpSession.getAttribute("loggedInUser");
         Order order = cartService.viewCart(username);
         model.addAttribute("loggedInUser", loggedInUser);
         model.addAttribute("sizeCart", cartService.getSizeCart(username));
 
-        if (order == null || order.getOrderDetails().isEmpty()) {
-            model.addAttribute("emptyCart", true);
-            return "user/cart";
-        }
-
-        if (!"Pending".equals(order.getStatus())) {
-            model.addAttribute("orderNotPending", true);
+        if (order == null || order.getOrderDetails().isEmpty() || !"Pending".equals(order.getStatus())) {
+            model.addAttribute("emptyCart", order == null || order.getOrderDetails().isEmpty());
+            model.addAttribute("orderNotPending", !"Pending".equals(order.getStatus()));
             return "user/cart";
         }
 
@@ -66,7 +55,7 @@ public class CartController {
 
     @GetMapping("/remove/{orderDetailsId}")
     public String removeFromCart(@PathVariable Long orderDetailsId, Model model) {
-        // Call the service method to remove the item from the cart
+
         cartService.removeFromCart(orderDetailsId);
         // Retrieve the username from the session
         Account loggedInUser = (Account) httpSession.getAttribute("loggedInUser");
@@ -111,9 +100,7 @@ public class CartController {
     public String backToCart(Model model) {
         Account loggedInUser = (Account) httpSession.getAttribute("loggedInUser");
         String username = loggedInUser.getUsername();
-
         model.addAttribute("loggedInUser", loggedInUser);
-
         return "redirect:/cart/" + username;
     }
 
