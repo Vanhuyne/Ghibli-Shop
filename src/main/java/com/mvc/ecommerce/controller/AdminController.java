@@ -24,10 +24,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
 
 
 @Controller
@@ -44,13 +42,9 @@ public class AdminController {
 
     @GetMapping("/dashboard")
     public String adminDashboard(Model model, @RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "5") int size) {
+                                 @RequestParam(defaultValue = "7") int size) {
 
         Account loggedInUser = (Account) httpSession.getAttribute("loggedInUser");
-
-        if (loggedInUser == null || !loggedInUser.getAdmin()) {
-            return "redirect:/login";
-        }
 
         model.addAttribute("loggedInUser", loggedInUser);
         model.addAttribute("activeSection", "users");
@@ -62,7 +56,7 @@ public class AdminController {
 
     @GetMapping("/dashboard/{activeSection}")
     public String adminAction(@PathVariable String activeSection, @RequestParam(defaultValue = "0") int page,
-                              @RequestParam(defaultValue = "5") int size, Model model) {
+                              @RequestParam(defaultValue = "7") int size, Model model) {
         model.addAttribute("activeSection", activeSection);
 
         // Fetch data for the respective sections using switch case
@@ -81,6 +75,7 @@ public class AdminController {
                 model.addAttribute("currentPage", page);
                 model.addAttribute("totalPages", usersPage.getTotalPages());
                 model.addAttribute("user", new Account());
+                showChartUser(model);
                 break;
 
             case "products":
@@ -365,24 +360,21 @@ public class AdminController {
         excelExporter.export(response);
     }
 
-    @GetMapping("/user-chart")
-    public String showChart(Model model) {
+    public void showChartUser(Model model) {
         List<Account> accounts = accountService.getAllUsers(); // Assuming you have a repository to fetch accounts
 
         long adminCount = accounts.stream().filter(Account::getAdmin).count();
         long userCount = accounts.stream().filter(account -> !account.getAdmin()).count();
 
+        // Count the number of activated and non-activated accounts using lambda expressions
         long activatedCount = accounts.stream().filter(Account::getActivated).count();
-        long nonActivatedCount = accounts.size() - activatedCount;
+        long nonActivatedCount = accounts.stream().filter(account -> !account.getActivated()).count();
 
+        // Prepare data for chart
         model.addAttribute("adminCount", adminCount);
         model.addAttribute("userCount", userCount);
-
         model.addAttribute("activatedCount", activatedCount);
         model.addAttribute("nonActivatedCount", nonActivatedCount);
-
-
-        return "admin/account/chart";
 
     }
 

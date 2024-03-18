@@ -5,20 +5,20 @@
         <ul class="pagination justify-content-center">
             <li class="page-item rounded-circle " th:class="${currentPage == 0} ? 'disabled'">
                 <a class="page-link rounded-circle me-1"
-                   th:href="@{'/admin/dashboard/' + ${activeSection}(size=${5}, page=${currentPage - 1 }) }"
+                   th:href="@{'/admin/dashboard/' + ${activeSection}(size=${size}, page=${currentPage - 1 }) }"
                    aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
             </li>
             <li class="page-item rounded-circle "
                 th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
                 th:class="${pageNumber == currentPage} ? 'active'">
                 <a class="page-link rounded-circle me-1"
-                   th:href="@{'/admin/dashboard/' + ${activeSection}(size=${5}, page=${pageNumber})}"
+                   th:href="@{'/admin/dashboard/' + ${activeSection}(size=${size}, page=${pageNumber})}"
                    th:text="${pageNumber + 1}"></a>
             </li>
             <li class="page-item rounded-circle"
                 th:class="${currentPage == totalPages - 1} ? 'disabled'">
                 <a class="page-link rounded-circle me-1"
-                   th:href="@{'/admin/dashboard/' + ${activeSection}(size=${5}, page=${currentPage + 1 })}"
+                   th:href="@{'/admin/dashboard/' + ${activeSection}(size=${size}, page=${currentPage + 1 })}"
                    aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
             </li>
         </ul>

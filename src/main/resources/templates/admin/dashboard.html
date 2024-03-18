@@ -9,43 +9,43 @@
             crossorigin="anonymous"></script>
     <!-- Include Bootstrap Icons library (CDN) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link th:href="@{/styles/main.css}" rel="stylesheet"/>
 </head>
 <body>
 <div th:replace="~{fragments/_navbar :: nav}"></div>
-<div class="container">
+<div class="container ">
     <div class="row mt-5 p-3">
         <!-- Management Categories Sidebar -->
         <nav class="col-md-2 border border-1 bg-light sidebar p-2">
             <div class="sidebar-sticky">
-                <h3 class="m-4 fw-bold border-bottom">Management </h3>
+                <h3 class="m-4 fw-bold border-bottom mt-5">Management </h3>
                 <ul class="nav flex-column ">
                     <li class="nav-item p-3">
                         <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover text-dark p-4"
-                           th:href="@{/admin/dashboard/users}">
+                           th:href="@{/admin/dashboard/users}" th:classappend="${activeSection == 'users'} ? 'fw-bold' : 'fst-normal'">
                             Users</a>
                     </li>
                     <li class="nav-item p-3">
                         <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover text-dark p-4"
-                           th:href="@{/admin/dashboard/products}">Products</a>
+                           th:href="@{/admin/dashboard/products}" th:classappend="${activeSection == 'products'} ? 'fw-bold' : 'fst-normal'">Products</a>
                     </li>
                     <li class="nav-item p-3">
                         <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover text-dark p-4"
-                           th:href="@{/admin/dashboard/orders}">Orders</a>
+                           th:href="@{/admin/dashboard/orders}" th:classappend="${activeSection == 'orders'} ? 'fw-bold' : 'fst-normal'">Orders</a>
                     </li>
                     <li class="nav-item p-3">
                         <a class="link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover text-dark p-4"
-                           th:href="@{/admin/dashboard/categories}">Categories</a>
+                           th:href="@{/admin/dashboard/categories}" th:classappend="${activeSection == 'categories'} ? 'fw-bold' : 'fst-normal'">Categories</a>
                     </li>
                 </ul>
             </div>
         </nav>
-        <div class="col-md-10 border border-1 bg-light p-4">
+        <div class="col-md-10 border border-1 bg-light p-4 mt-4">
             <div th:switch="${activeSection}">
                 <!-- User List Section -->
                 <div th:case="users">
-                    <h2>User List</h2>
+                    <h2 >User List</h2>
                     <div class="row">
 
                         <p class="col-6 d-flex justify-content-start">
@@ -56,7 +56,7 @@
                                     class="bi bi-person-plus me-2"></i>New user</a>
                         </p>
                     </div>
-                    <table class="table text-center">
+                    <table class="table text-center table-bordered">
                         <thead class="thead-dark">
                         <tr>
                             <th>Username</th>
@@ -75,7 +75,7 @@
                         <tr th:each="user : ${users}">
                             <td th:text="${user.username}"></td>
                             <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;" th:text="${user.password}"></td>
-                            <td th:text="${user.address}"></td>
+                            <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis;" th:text="${user.address}"></td>
                             <td th:text="${user.fullname}"></td>
                             <td th:text="${user.email}"></td>
 
@@ -98,9 +98,8 @@
                         </tbody>
 
                     </table>
-                    <div th:include="~{fragments/pagination :: pagination}"></div>
-                    <div> <a href="/admin/user-chart">Chart User</a></div>
                 </div>
+
                 <!-- Product List Section -->
                 <div th:case='products'>
                     <h2>Product List</h2>
@@ -193,8 +192,8 @@
                             </div>
                         </div>
                     </div>
-                    <div th:include="~{fragments/pagination :: pagination}"></div>
                 </div>
+
                 <!-- Order List Section -->
                 <div th:case="orders">
                     <h2>Order List</h2>
@@ -388,14 +387,15 @@
                         </tbody>
                     </table>
 
-                    <div th:include="~{fragments/pagination :: pagination}"></div>
+
                 </div>
-                <div th:case="*">
-                    <!-- Handle default case -->
-                </div>
+                <div th:include="~{fragments/pagination :: pagination}"></div>
             </div>
         </div>
-
+        <div th:switch="${activeSection}">
+            <div th:case="users">
+                <div th:include="~{admin/account/charUser :: charUser}"> </div>
+            </div>
     </div>
     <div th:if="${error}" class="alert alert-warning" role="alert"
          th:text="${error}">
