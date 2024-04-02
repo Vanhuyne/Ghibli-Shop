@@ -15,7 +15,7 @@ This is a simple ecommerce application built with Java and Spring Boot.
 ## Technologies Used
 - Java 
 - JavaScript
-- Spring Boot
+- Spring Boot, Spring Security, Thymleaf
 - Maven
 - SQL
 - ChatGPT, Copilot
