@@ -1,0 +1,84 @@
+<div th:fragment="charUser" xmlns:th="http://www.thymeleaf.org">
+    <div class="container mt-3">
+        <h1>Account Distribution Chart</h1>
+        <div class="row">
+            <div class="col-md-7">
+                <canvas id="accountChart" width="150" height="100"></canvas>
+                <p><span class="badge bg-primary mt-4">Admin</span> - <span th:text="${adminCount}"></span></p>
+                <p><span class="badge bg-danger ">User</span> - <span th:text="${userCount}"></span></p>
+            </div>
+            <div class="col-md-5 ">
+                <div class="row">
+                    <canvas id="accountStatusChart" width="150" height="120"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3 text-end">
+            <h5 class="fx-bold mt-3">Total Accounts: <strong th:text="${adminCount + userCount}"></strong></h5>
+        </div>
+    </div>
+    <script th:inline="javascript">
+        // Data from the server
+            var adminCount = /*[[${adminCount}]]*/ 0;
+            var userCount = /*[[${userCount}]]*/ 0;
+
+            var ctx = document.getElementById('accountChart').getContext('2d');
+            var accountChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Admin', 'User'],
+                    datasets: [{
+                        label: 'Account Distribution',
+                        data: [adminCount, userCount],
+                        backgroundColor: [
+                            'rgba(54, 162, 235, 0.5)', // Blue color for admin
+                            'rgba(255, 99, 132, 0.5)'  // Red color for user
+                        ],
+                        borderColor: [
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 99, 132, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+
+        var activatedCount = /*[[${activatedCount}]]*/ 0;
+    var nonActivatedCount = /*[[${nonActivatedCount}]]*/ 0;
+
+    var ctx = document.getElementById('accountStatusChart').getContext('2d');
+    var accountStatusChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Activated', 'Non-Activated'],
+            datasets: [{
+                label: 'Account Status',
+                data: [activatedCount, nonActivatedCount],
+                backgroundColor: [
+                    'rgba(46, 204, 113, 0.5)', // Green color for activated
+                    'rgba(241, 196, 15, 0.5)'  // Yellow color for non-activated
+                ],
+                borderColor: [
+                    'rgba(46, 204, 113, 0.5)',
+                    'rgba(46, 204, 113, 0.5)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+    </script>
+
+</div>
