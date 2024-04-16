@@ -31,4 +31,8 @@ public interface AccountService {
 
     List<Account> getAllUsers();
 
+    // rest of the methods
+    Account updateUser(Account user);
+
+//    void deleteData(String username);
 }

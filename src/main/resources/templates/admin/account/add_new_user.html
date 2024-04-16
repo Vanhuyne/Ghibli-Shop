@@ -17,13 +17,16 @@
             border-radius: 8px;
             padding: 20px;
         }
+        .add-new{
+            margin-top: 100px;
+            }
     </style>
 </head>
 <body>
 
 <div th:replace="~{fragments/_navbar :: nav}"></div>
-<div class="container mt-5 container-border " style="max-width: 1000px; ">
-    <h2 class="text-center mt-2">Add Account</h2>
+<div class="container mt-5  container-border " style="max-width: 1000px; ">
+    <h2 class="text-center mt-5 ">Add Account</h2>
     <form class="p-2" th:action="@{/admin/add-new-user}" method="post"
           enctype="multipart/form-data"
           th:object="${user}">

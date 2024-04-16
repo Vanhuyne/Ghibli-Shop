@@ -32,5 +32,8 @@ public interface ProductService {
 
     Page<Product> getAllProductsByPageAndAvailable(Pageable pageRequest);
 
+    // Rest API
+    Product updateProductById(Long id, Product product);
 
+    Product createProduct(Product product);
 }

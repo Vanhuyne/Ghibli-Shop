@@ -6,7 +6,7 @@
             <div th:each="product : ${products}" class="col mt-4">
                 <div class="card-block rounded-0 shadow p-2 mb-5 bg-body">
                     <a th:href="@{'/products-details/' + ${product.id}}">
-                        <img th:src="${product.image}" class="card-img-top img-fluid rounded-0 "
+                        <img th:src="@{${product.image}}" class="card-img-top img-fluid rounded-0 "
                              alt="Product Image"></a>
                     <div class="card-body">
                         <a th:href="@{'/products-details/' + ${product.id}}"

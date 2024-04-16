@@ -26,6 +26,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -45,12 +46,14 @@ public class AdminController {
                                  @RequestParam(defaultValue = "7") int size) {
 
         Account loggedInUser = (Account) httpSession.getAttribute("loggedInUser");
-
-        model.addAttribute("loggedInUser", loggedInUser);
-        model.addAttribute("activeSection", "users");
-        fetchUserData("users", page, size, model);
-        model.addAttribute("sizeCart", cartService.getSizeCart(loggedInUser.getUsername()));
-
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        } else {
+            model.addAttribute("loggedInUser", loggedInUser);
+            model.addAttribute("activeSection", "users");
+            fetchUserData("users", page, size, model);
+            model.addAttribute("sizeCart", cartService.getSizeCart(loggedInUser.getUsername()));
+        }
         return "admin/dashboard";
     }
 
@@ -75,7 +78,7 @@ public class AdminController {
                 model.addAttribute("currentPage", page);
                 model.addAttribute("totalPages", usersPage.getTotalPages());
                 model.addAttribute("user", new Account());
-                showChartUser(model);
+                showChartUser(model); 
                 break;
 
             case "products":
@@ -93,6 +96,7 @@ public class AdminController {
                 // Sort the orders based on status
                 Collections.sort(orders, Comparator.comparing(Order::getStatus));
                 model.addAttribute("orders", orders);
+                getOrderDataForChart(model);
                 break;
 
             case "categories":
@@ -364,6 +368,7 @@ public class AdminController {
         List<Account> accounts = accountService.getAllUsers(); // Assuming you have a repository to fetch accounts
 
         long adminCount = accounts.stream().filter(Account::getAdmin).count();
+        System.out.println(adminCount);
         long userCount = accounts.stream().filter(account -> !account.getAdmin()).count();
 
         // Count the number of activated and non-activated accounts using lambda expressions
@@ -378,5 +383,12 @@ public class AdminController {
 
     }
 
+    public void getOrderDataForChart(Model model) {
+        List<Order> orders = orderService.getAllOrders();
 
+        Map<String, Map<String, Long>> orderData = orders.stream()
+                .collect(Collectors.groupingBy(order -> order.getCreateDate().toLocalDate().toString(),
+                        Collectors.groupingBy(Order::getStatus, Collectors.counting())));
+        model.addAttribute("orderData", orderData);
+    }
 }

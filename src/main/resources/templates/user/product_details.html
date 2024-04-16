@@ -52,7 +52,7 @@
         var quantity = document.getElementById("inputQuantity").value;
         var productId = /*[[${product.id}]]*/ '';   // Get the product id from thymeleaf
         var username = /*[[${loggedInUser?.username}]]*/ '';
-        var url = '/products-details/addFromProductDetails/' + productId + '?username=' + username + '&quantity=' + quantity;
+        var url = '/ghibli-store/products-details/addFromProductDetails/' + productId + '?username=' + username + '&quantity=' + quantity;
         window.location.href = url;
     });
     /*]]>*/

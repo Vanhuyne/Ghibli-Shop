@@ -23,7 +23,7 @@
         <!-- Check if the shopping cart is empty -->
         <div th:if="${emptyCart}" class="text-center">
             <p class="text-muted">Your shopping cart is empty. Add some products!</p>
-            <p><a href="/products" class="btn btn-outline-secondary rounded-0"><i
+            <p><a th:href="@{/products}" class="btn btn-outline-secondary rounded-0"><i
                     class="bi bi-arrow-left me-2"></i>Continue
                 Shopping</a>
         </div>
@@ -88,7 +88,7 @@
             <div class="row mt-2">
                 <div class="col-md-6 text-end font-weight-bold">
                     <p class="d-flex justify-content-start">
-                        <a href="/products" class="btn btn-outline-secondary rounded-0"><i
+                        <a th:href="@{/products}" class="btn btn-outline-secondary rounded-0"><i
                                 class="bi bi-arrow-left me-2"></i>Continue
                             Shopping</a>
                     </p>

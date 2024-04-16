@@ -5,6 +5,7 @@ import com.mvc.ecommerce.service.AccountService;
 import com.mvc.ecommerce.service.CartService;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,29 +23,23 @@ public class LoginController {
     private final AccountService accountService;
     private final HttpSession httpSession;
 
-    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/login")
     public String showLoginForm() {
         return (httpSession.getAttribute("loggedInUser") != null) ? "redirect:/products" : "user/login";
     }
-    
+
     @GetMapping("/view-profile/{username}")
     public String viewProfile(@PathVariable(required = false) String username, Model model) {
         Account loggedInUser = (Account) httpSession.getAttribute("loggedInUser");
         if (username != null && !username.isEmpty()) {
-            // Assuming you have a method getUserByUsername in your service
             Account user = accountService.getUserByUsername(username);
-            if (user != null) {
-                model.addAttribute("loggedInUser", loggedInUser);
-                model.addAttribute("user", user);
-
-                int sizeCart = cartService.getSizeCart(username);
-                model.addAttribute("sizeCart", sizeCart);
-                return "user/edit_profile";
-            } else {
+            if (user == null) {
                 return "redirect:/login";
             }
+            model.addAttribute("loggedInUser", loggedInUser);
+            model.addAttribute("user", user);
+            model.addAttribute("sizeCart", cartService.getSizeCart(username));
         }
         return "user/edit_profile";
     }
@@ -98,5 +93,6 @@ public class LoginController {
     public String showAccessDenied() {
         return "user/error";
     }
+
 
 }

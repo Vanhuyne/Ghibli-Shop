@@ -132,5 +132,22 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
     }
 
+    @Override
+    public Product updateProductById(Long id, Product product) {
+        Product existingProduct = productRepository.findProductById(id);
+        if (existingProduct == null) {
+            throw new IllegalArgumentException("Product not found");
+        }
+        existingProduct.setName(product.getName());
+        existingProduct.setPrice(product.getPrice());
+        existingProduct.setAvailable(product.isAvailable());
+        existingProduct.setImage(product.getImage());
+        existingProduct.setCategory(product.getCategory());
+        return productRepository.save(existingProduct);
+    }
 
+    @Override
+    public Product createProduct(Product product) {
+        return productRepository.save(product);
+    }
 }

@@ -7,8 +7,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,6 +27,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
+
 
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
@@ -192,6 +191,30 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<Account> getAllUsers() {
         return accountRepository.findAll();
+    }
+
+    @Override
+    public Account updateUser(Account user) {
+// find user by username
+        Optional<Account> existingUser = accountRepository.findByUsername(user.getUsername());
+
+        // check if user exists
+        if (existingUser.isPresent()) {
+            // update user
+            Account existingAccount = existingUser.get();
+            existingAccount.setUsername(user.getUsername());
+            existingAccount.setEmail(user.getEmail());
+            existingAccount.setFullname(user.getFullname());
+            existingAccount.setPassword(passwordEncoder.encode(user.getPassword()));
+            existingAccount.setAddress(user.getAddress());
+            existingAccount.setAdmin(false);
+            existingAccount.setActivated(true);
+
+            // save user
+            return accountRepository.save(existingAccount);
+        } else {
+            throw new NotFoundException("User not found");
+        }
     }
 
 

@@ -5,30 +5,27 @@ import com.mvc.ecommerce.service.AccountService;
 import com.mvc.ecommerce.service.CartService;
 import com.mvc.ecommerce.service.CategoryService;
 import com.mvc.ecommerce.service.ProductService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping()
+@RequestMapping("/products")
 public class ProductController {
     private final ProductService productService;
     private final AccountService accountService;
@@ -36,7 +33,7 @@ public class ProductController {
     private final CategoryService categoryService;
     private final CartService cartService;
 
-    @GetMapping("/products")
+    @GetMapping()
     public String getAllProducts(Model model, @RequestParam(defaultValue = "0") int page,
                                  @RequestParam(defaultValue = "8") int size) {
         Account loggedInUser = getLoggedInUser();
@@ -70,7 +67,7 @@ public class ProductController {
         model.addAttribute("totalItems", products.getTotalElements());
     }
 
-    @GetMapping("/products/filter")
+    @GetMapping("/filter")
     public String getProductsByCategoryId(@RequestParam(name = "categoryId") Long categoryId, Model model, @RequestParam(defaultValue = "0") int page,
                                           @RequestParam(defaultValue = "8") int size) {
         Account loggedInUser = getLoggedInUser();
@@ -85,7 +82,7 @@ public class ProductController {
         return "user/products";
     }
 
-    @GetMapping("/products/search")
+    @GetMapping("/search")
     public String searchProducts(@RequestParam("keyword") String keyword,
                                  @RequestParam(defaultValue = "0") int page,
                                  @RequestParam(defaultValue = "8") int size,
@@ -108,7 +105,7 @@ public class ProductController {
         return "user/products";
     }
 
-    @GetMapping("/products/sortByPrice")
+    @GetMapping("/sortByPrice")
     public String getProductsSortedByPrice(
             Model model, @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "8") int size, @RequestParam(defaultValue = "asc") String sort) {

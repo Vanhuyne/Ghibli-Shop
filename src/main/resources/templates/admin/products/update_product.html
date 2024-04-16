@@ -23,7 +23,7 @@
 <div th:replace="~{fragments/_navbar :: nav}"></div>
 <div class="container mt-5 container-border " style="max-width: 1000px; ">
     <h2 class="text-center mt-2">Update product</h2>
-    <form action="/admin/update-product" method="post" enctype="multipart/form-data">
+    <form th:action="@{/admin/update-product}" method="post" enctype="multipart/form-data">
         <div class="row">
             <div class="col-6">
                 <img th:src="@{${product.image}}" alt="Product Image" class="img-fluid">

@@ -1,6 +1,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom border-secondary fixed-top">
     <div class="container ">
-        <a class="navbar-brand p-2 me-5" th:href="@{/products}"><img th:src="@{/images/icon/logo.png}" width="100"
+        <a class="navbar-brand p-2 me-5" th:href="@{/products}"><img th:src="@{/images/icon/logo.png}"
+                                                                     width="100"
                                                                      alt="logo"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
                 aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
@@ -12,10 +13,10 @@
                     <a class="nav-link active" aria-current="page" href="#">Home</a>
                 </li>
                 <li class="nav-item pe-2">
-                    <a class="nav-link" href="/products#about">About</a>
+                    <a class="nav-link" href="/ghibli-store/products#about">About</a>
                 </li>
                 <li class="nav-item pe-2">
-                    <a class="nav-link" href="/products#features">Features</a>
+                    <a class="nav-link" href="/ghibli-store/products#features">Features</a>
                 </li>
             </ul>
             <form th:action="@{/products/search}" method="get" role="search"
@@ -47,11 +48,11 @@
 
                     <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownUsername"
                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <img th:src="${loggedInUser.photo}" alt="User Photo"
+                        <img th:src="@{${loggedInUser.photo}}" alt="User Photo"
                              style="width: 30px; height: 30px; border-radius: 50%;">
                         <!--                        <span th:text="${loggedInUser.username}"></span>-->
                     </a>
-
+                    <!--                    <div th:text="${loggedInUser.photo}"></div>-->
                     <ul class="dropdown-menu" aria-labelledby="dropdownUsername">
                         <li><a class="dropdown-item"
                                th:href="@{/view-profile/{username}(username=${loggedInUser?.username})}">Profile</a>

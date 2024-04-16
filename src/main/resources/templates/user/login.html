@@ -24,8 +24,6 @@
 <div class="container mt-5 container-border " style="max-width: 600px; ">
     <h2 class="text-center mb-4">Login</h2>
     <form th:action="@{/login-process}" method="post" action="#">
-        <!-- Include CSRF Token -->
-        <!--        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
         <div class="form-outline mb-4">
             <label class="form-label" for="username">Username</label>
             <input type="text" id="username" name="username" class="form-control" required>
