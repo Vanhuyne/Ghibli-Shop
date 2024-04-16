@@ -15,7 +15,7 @@ This is a simple ecommerce application built with Java and Spring Boot.
 ## Technologies Used
 - Java 
 - JavaScript
-- Spring Boot
+- Spring Boot, Spring Security, Thymleaf
 - Maven
 - SQL
 - ChatGPT, Copilot
@@ -31,9 +31,14 @@ This is a simple ecommerce application built with Java and Spring Boot.
     ![Project Logo](homepage.png)
   
   ### Admin Features
-  - CRUD operations for admin (Create, Read, Update, Delete) to manage products, category, users
+  - CRUD operations for admin (Create, Read, Update, Delete) to manage products, category, users .
 
-  ![Project Logo](manager.png)
+  ![Project Logo](manager.png) 
+  
+  - Chart for Entity.
+    
+  ![Project Logo](img-chart.png)
+     
 ## Setup
 
 ### Prerequisites
