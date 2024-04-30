@@ -1,0 +1,98 @@
+<div th:fragment="productList">
+    <div id="productListContent">
+        <!-- Product Cards -->
+        <div class="row row-cols-1 row-cols-md-4 px-5 ">
+            <!-- Iterate over the list of products and display them as cards -->
+            <div th:each="product : ${products}" class="col mt-4">
+                <div class="card-block rounded-0 shadow p-2 mb-5 bg-body">
+                    <a th:href="@{'/products-details/' + ${product.id}}">
+                        <img th:src="@{${product.image}}" class="card-img-top img-fluid rounded-0 "
+                             alt="Product Image"></a>
+                    <div class="card-body">
+                        <a th:href="@{'/products-details/' + ${product.id}}"
+                           class="card-title fw-bold text-decoration-none "
+                           th:text="${product.name}"></a>
+                        <p class="card-text" th:text="${product.price}"></p>
+                        <!-- Add more details as needed -->
+                        <a th:href="@{'/cart/add/' + ${product.id} + '?username=' + ${loggedInUser?.username}+'#products-list' }"
+                           class="btn btn-outline-secondary rounded-0 w-100 border-secondary ">Add to Cart</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Display pagination controls -->
+        <nav aria-label="Page navigation example" th:if="${totalPages > 1 && sort == null  && categoryId == null}">
+            <ul class="pagination justify-content-center">
+                <li class="page-item rounded-circle " th:class="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link rounded-circle me-1"
+                       th:href="@{/products(size=${size}, page=${currentPage - 1})}"
+                       aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                </li>
+                <li class="page-item rounded-circle "
+                    th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
+                    th:class="${pageNumber == currentPage} ? 'active'">
+                    <a class="page-link rounded-circle me-1"
+                       th:href="@{/products(size=${size}, page=${pageNumber})}"
+                       th:text="${pageNumber + 1}"></a>
+                </li>
+                <li class="page-item rounded-circle"
+                    th:class="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link rounded-circle me-1"
+                       th:href="@{/products(size=${size}, page=${currentPage + 1})}"
+                       aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+                </li>
+            </ul>
+        </nav>
+
+        <nav aria-label="Page navigation example" th:if="${totalPages > 1 && sort != null}">
+            <ul class="pagination justify-content-center">
+                <li class="page-item rounded-circle " th:class="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link rounded-circle me-1"
+                       th:href="@{/products/sortByPrice(sort=${sort},size=${size}, page=${currentPage - 1})}"
+                       aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+                </li>
+                <li class="page-item rounded-circle "
+                    th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
+                    th:class="${pageNumber == currentPage} ? 'active'">
+                    <a class="page-link rounded-circle me-1"
+                       th:href="@{/products/sortByPrice(sort=${sort} , size=${size}, page=${pageNumber})}"
+                       th:text="${pageNumber + 1}"></a>
+                </li>
+                <li class="page-item rounded-circle"
+                    th:class="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link rounded-circle me-1"
+                       th:href="@{/products/sortByPrice(sort=${sort},size=${size}, page=${currentPage + 1})}"
+                       aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
+                </li>
+            </ul>
+
+        </nav>
+        <nav aria-label="Page navigation example" th:if="${totalPages > 1 && sort == null && categoryId != null}">
+            <ul class="pagination justify-content-center">
+                <li class="page-item rounded-circle" th:class="${currentPage == 0} ? 'disabled'">
+                    <a class="page-link rounded-circle me-1"
+                       th:href="@{/products/filter(categoryId=${categoryId}, size=${size}, page=${currentPage - 1})}"
+                       aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item rounded-circle"
+                    th:each="pageNumber : ${#numbers.sequence(0, totalPages - 1)}"
+                    th:class="${pageNumber == currentPage} ? 'active'">
+                    <a class="page-link rounded-circle me-1"
+                       th:href="@{/products/filter(categoryId=${categoryId}, size=${size}, page=${pageNumber})}"
+                       th:text="${pageNumber + 1}"></a>
+                </li>
+                <li class="page-item rounded-circle"
+                    th:class="${currentPage == totalPages - 1} ? 'disabled'">
+                    <a class="page-link rounded-circle me-1"
+                       th:href="@{/products/filter(categoryId=${categoryId}, size=${size}, page=${currentPage + 1})}"
+                       aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+    </div>
+</div>

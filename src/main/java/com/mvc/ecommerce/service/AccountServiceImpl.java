@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import static com.mvc.ecommerce.constant.Constant.UPLOAD_DIR;
+import static com.mvc.ecommerce.utils.Constant.UPLOAD_DIR;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
