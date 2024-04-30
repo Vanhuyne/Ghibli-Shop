@@ -23,7 +23,7 @@ This is a simple ecommerce application built with Java and Spring Boot.
 
 ## Class diagram
 
-## Features
+## Diagram
 
 ![Project Logo](screenshots/diagram.png)
 
