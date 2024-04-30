@@ -45,7 +45,7 @@
                     <tbody class="align-middle">
                     <!-- Iterate over order details -->
                     <tr th:each="orderDetail : ${order.orderDetails}">
-                        <td><img th:src="${orderDetail.product.image}" alt="Product Image"
+                        <td><img th:src="@{${orderDetail.product.image}}" alt="Product Image"
                                  class="img-thumbnail rounded-0 "
                                  style="width: 250px;"/></td>
                         <td th:text="${orderDetail.product.name}"></td>

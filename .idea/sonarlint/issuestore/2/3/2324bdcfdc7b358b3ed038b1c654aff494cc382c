@@ -1,0 +1,9 @@
+
+
+java:S11924"KDefine a constant instead of duplicating this literal "orderTotal" 3 times.(Şìük8•æÏò1J$552a20cf-f0e9-450b-92b5-2526005edc82
+“
+java:S1192C"PDefine a constant instead of duplicating this literal "redirect:/cart/" 3 times.(Î²»‚8•æÏò1J$ad9d319b-587f-4943-b832-0da0323d1316
+
+java:S11923"FDefine a constant instead of duplicating this literal "order" 3 times.(”²€®úÿÿÿÿ8•æÏò1J$ac2b693d-b12d-42e6-a4ef-8b5985454eed
+‹
+java:S2259,"CA "NullPointerException" could be thrown; "order" is nullable here.(ä‚­æúÿÿÿÿ8ÇÃçÏò1J$0e1e73d3-9c77-4f72-862b-119a3fd7da9d

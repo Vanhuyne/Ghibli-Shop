@@ -5,6 +5,7 @@ import com.mvc.ecommerce.entity.Order;
 
 import com.mvc.ecommerce.exceptions.NotFoundException;
 import com.mvc.ecommerce.service.CartService;
+import com.mvc.ecommerce.utils.Constant;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -23,7 +24,7 @@ public class CartController {
     public String addToCart(@PathVariable Long productId, @RequestParam String username, Model model) {
         try {
             cartService.addToCart(productId, username, 1);
-            model.addAttribute("sizeCart", cartService.getSizeCart(username));
+            model.addAttribute(Constant.SIZE_CART, cartService.getSizeCart(username));
         } catch (NotFoundException e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "redirect:/login";
@@ -33,10 +34,10 @@ public class CartController {
 
     @GetMapping("/{username}")
     public String viewCart(@PathVariable(required = false) String username, Model model) {
-        Account loggedInUser = (Account) httpSession.getAttribute("loggedInUser");
+        Account loggedInUser = (Account) httpSession.getAttribute(Constant.LOGGED_IN_USER);
         Order order = cartService.viewCart(username);
-        model.addAttribute("loggedInUser", loggedInUser);
-        model.addAttribute("sizeCart", cartService.getSizeCart(username));
+        model.addAttribute(Constant.LOGGED_IN_USER, loggedInUser);
+        model.addAttribute(Constant.SIZE_CART, cartService.getSizeCart(username));
 
         if (order == null || order.getOrderDetails().isEmpty() || !"Pending".equals(order.getStatus())) {
             model.addAttribute("emptyCart", order == null || order.getOrderDetails().isEmpty());
@@ -58,11 +59,11 @@ public class CartController {
 
         cartService.removeFromCart(orderDetailsId);
         // Retrieve the username from the session
-        Account loggedInUser = (Account) httpSession.getAttribute("loggedInUser");
+        Account loggedInUser = (Account) httpSession.getAttribute(Constant.LOGGED_IN_USER);
         String username = loggedInUser.getUsername();
 
         // Redirect to the cart view after removing the item
-        model.addAttribute("sizeCart", cartService.getSizeCart(username));
+        model.addAttribute(Constant.SIZE_CART, cartService.getSizeCart(username));
         return "redirect:/cart/" + username;
     }
 
@@ -71,25 +72,22 @@ public class CartController {
                                  @RequestParam int quantityChange, Model model) {
         cartService.updateQuantity(orderDetailsId, quantityChange);
 
-        Account loggedInUser = (Account) httpSession.getAttribute("loggedInUser");
+        Account loggedInUser = (Account) httpSession.getAttribute(Constant.LOGGED_IN_USER);
         String username = loggedInUser.getUsername();
 
-        model.addAttribute("loggedInUser", loggedInUser);
+        model.addAttribute(Constant.LOGGED_IN_USER, loggedInUser);
 
         return "redirect:/cart/" + username;
     }
 
     @GetMapping("/confirm-order")
     public String confirmOrder(@RequestParam("orderTotal") Double orderTotal, Model model) {
-        Account loggedInUser = (Account) httpSession.getAttribute("loggedInUser");
+        Account loggedInUser = (Account) httpSession.getAttribute(Constant.LOGGED_IN_USER);
         String username = loggedInUser.getUsername();
 
         Order order = cartService.viewCart(username);
 
-        // Confirm the order during checkout
-        //cartService.confirmOrder(order.getId());
-
-        model.addAttribute("loggedInUser", loggedInUser);
+        model.addAttribute(Constant.LOGGED_IN_USER, loggedInUser);
         model.addAttribute("order", order);
         model.addAttribute("orderTotal", orderTotal);
         model.addAttribute("sizeCart", cartService.getSizeCart(username));
@@ -98,9 +96,9 @@ public class CartController {
 
     @GetMapping("/back")
     public String backToCart(Model model) {
-        Account loggedInUser = (Account) httpSession.getAttribute("loggedInUser");
+        Account loggedInUser = (Account) httpSession.getAttribute(Constant.LOGGED_IN_USER);
         String username = loggedInUser.getUsername();
-        model.addAttribute("loggedInUser", loggedInUser);
+        model.addAttribute(Constant.LOGGED_IN_USER, loggedInUser);
         return "redirect:/cart/" + username;
     }
 

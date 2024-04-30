@@ -6,6 +6,7 @@ import com.mvc.ecommerce.entity.Category;
 import com.mvc.ecommerce.entity.Order;
 import com.mvc.ecommerce.entity.Product;
 import com.mvc.ecommerce.service.*;
+import com.mvc.ecommerce.utils.Constant;
 import com.mvc.ecommerce.utils.OrderExcelExporter;
 import com.mvc.ecommerce.utils.UserExcelExporter;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,7 +25,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,18 +40,20 @@ public class AdminController {
     private final CartService cartService;
     private final CategoryService categoryService;
 
+    private String users = "users";
+    private String categories = "categories";
 
     @GetMapping("/dashboard")
     public String adminDashboard(Model model, @RequestParam(defaultValue = "0") int page,
                                  @RequestParam(defaultValue = "7") int size) {
 
-        Account loggedInUser = (Account) httpSession.getAttribute("loggedInUser");
+        Account loggedInUser = (Account) httpSession.getAttribute(Constant.LOGGED_IN_USER);
         if (loggedInUser == null) {
             return "redirect:/login";
         } else {
-            model.addAttribute("loggedInUser", loggedInUser);
-            model.addAttribute("activeSection", "users");
-            fetchUserData("users", page, size, model);
+            model.addAttribute(Constant.LOGGED_IN_USER, loggedInUser);
+            model.addAttribute("activeSection", users);
+            fetchUserData(users, page, size, model);
             model.addAttribute("sizeCart", cartService.getSizeCart(loggedInUser.getUsername()));
         }
         return "admin/dashboard";
@@ -74,11 +76,11 @@ public class AdminController {
             case "users":
                 Page<Account> usersPage = accountService.getUsersByPage(PageRequest.of(page, size));
 
-                model.addAttribute("users", usersPage.getContent());
+                model.addAttribute(users, usersPage.getContent());
                 model.addAttribute("currentPage", page);
                 model.addAttribute("totalPages", usersPage.getTotalPages());
                 model.addAttribute("user", new Account());
-                showChartUser(model); 
+                showChartUser(model);
                 break;
 
             case "products":
@@ -100,14 +102,16 @@ public class AdminController {
                 break;
 
             case "categories":
-                List<Category> categories = categoryService.getAllCategories();
-                model.addAttribute("categories", categories);
+                model.addAttribute("categories", getCategories());
                 break;
             default:
                 break;
         }
     }
 
+    private List<Category> getCategories() {
+        return categoryService.getAllCategories();
+    }
 
     @GetMapping("/add-new-user")
     public String list(Model model) {
@@ -231,10 +235,10 @@ public class AdminController {
     @GetMapping("/update-product/{id}")
     public String showUpdateProduct(@PathVariable("id") Long id, Model model) {
         Product product = productService.getProductById(id);
-        List<Category> categories = categoryService.getAllCategories(); // Assuming you have a method to get all categories
+        //List<Category> categories = categoryService.getAllCategories(); // Assuming you have a method to get all categories
         if (product != null) {
             model.addAttribute("product", product);
-            model.addAttribute("categories", categories);
+            model.addAttribute("categories", getCategories());
         }
         return "admin/products/update_product";
     }
@@ -368,7 +372,7 @@ public class AdminController {
         List<Account> accounts = accountService.getAllUsers(); // Assuming you have a repository to fetch accounts
 
         long adminCount = accounts.stream().filter(Account::getAdmin).count();
-        System.out.println(adminCount);
+
         long userCount = accounts.stream().filter(account -> !account.getAdmin()).count();
 
         // Count the number of activated and non-activated accounts using lambda expressions
