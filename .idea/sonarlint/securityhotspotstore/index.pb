@@ -25,3 +25,5 @@ U
 mvnw,5\d\5d837c4ed85ecaaf932c506e80ff5d7b9f3d590d
 7
 HELP.md,1\a\1a273f73b7a477b0745593641bd708a6182c7ad5
+n
+>src/test/java/com/mvc/ecommerce/EcommerceApplicationTests.java,f\f\ff2849093db2c128c9a674c695e55af01ab262bc
