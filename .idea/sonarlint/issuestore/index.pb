@@ -17,8 +17,6 @@ r
 Bsrc/main/java/com/mvc/ecommerce/controller/CategoryController.java,5\d\5dd192933953631172bf25c5e09ee08e0c3fb865
 x
 Hsrc/main/java/com/mvc/ecommerce/controller/ForgotPasswordController.java,d\5\d5b5807729eb98eb8af3d347aa3b85f0bc8350ed
-U
-%.mvn/wrapper/maven-wrapper.properties,3\2\32e074f71d16c1e88ac02aa83592ca6ad1fd98a8
 8
 mvnw.cmd,1\f\1f1763f358c257ea3515417352b82b0165647ad1
 4
