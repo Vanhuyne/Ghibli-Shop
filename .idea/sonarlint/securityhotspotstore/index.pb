@@ -27,3 +27,5 @@ n
 >src/test/java/com/mvc/ecommerce/EcommerceApplicationTests.java,f\f\ff2849093db2c128c9a674c695e55af01ab262bc
 _
 /src/main/resources/templates/user/register.html,b\b\bbd2e96b1810a62f52015a4c46e8cdb61ca69219
+f
+6src/main/resources/templates/user/product_details.html,f\a\fa8b515e13481f7943ad32eff3572d66ab5d15d7
