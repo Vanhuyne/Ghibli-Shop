@@ -39,12 +39,12 @@
 
             <div class="col d-flex justify-content-end">
                 <!-- Simple link -->
-                <a href="/forgot-password">Forgot password?</a>
+                <a th:href="@{/forgot-password}">Forgot password?</a>
             </div>
         </div>
         <button type="submit" class="btn btn-primary btn-block mb-4 w-100">Login</button>
         <div class="text-center">
-            <p>Not a member? <a href="/register">Register</a></p>
+            <p>Not a member? <a th:href="@{/register}">Register</a></p>
 
         </div>
     </form>
