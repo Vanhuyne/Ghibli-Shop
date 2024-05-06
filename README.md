@@ -40,6 +40,9 @@ This is a simple ecommerce application built with Java and Spring Boot.
 ### Admin Features
 
 - CRUD operations for admin (Create, Read, Update, Delete) to manage products, category, users .
+- Use chart.js to display product, user, order information.
+- Use the library to print reports about user orders into execl files
+
 
 ![Project Logo](screenshots/manager.png)
 
